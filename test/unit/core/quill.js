@@ -56,7 +56,7 @@ describe('Quill', function() {
       expect(this.quill.emitter.emit).toHaveBeenCalledWith(Emitter.events.TEXT_CHANGE, change, this.oldDelta, Emitter.sources.API);
     });
 
-    it('format', function() {
+    it('format()', function() {
       this.quill.setSelection(3, 2);
       this.quill.format('bold', true);
       let change = new Delta().retain(3).retain(2, { bold: true });
@@ -101,13 +101,11 @@ describe('Quill', function() {
     });
 
     it('getBounds() index', function() {
-      let bounds = this.quill.selection.getBounds(1);
-      expect(this.quill.getBounds(1)).toEqual(bounds);
+      expect(this.quill.getBounds(1)).toBeTruthy();
     });
 
     it('getBounds() range', function() {
-      let bounds = this.quill.selection.getBounds(3, 4);
-      expect(this.quill.getBounds(new Range(3, 4))).toEqual(bounds);
+      expect(this.quill.getBounds(new Range(3, 4))).toBeTruthy();
     });
 
     it('getFormat()', function() {
@@ -151,6 +149,49 @@ describe('Quill', function() {
       this.quill.updateContents(delta.ops);
       expect(this.quill.root).toEqualHTML('<p>0123<em>4</em>|<em>5</em>67</p>');
       expect(this.quill.emitter.emit).toHaveBeenCalledWith(Emitter.events.TEXT_CHANGE, delta, this.oldDelta, Emitter.sources.API);
+    });
+  });
+
+  describe('events', function() {
+    beforeEach(function() {
+      this.quill = this.initialize(Quill, '<p>0123</p>');
+      this.quill.update();
+      spyOn(this.quill.emitter, 'emit').and.callThrough();
+      this.oldDelta = this.quill.getContents();
+    });
+
+    it('api text insert', function() {
+      this.quill.insertText(2, '!');
+      let delta = new Delta().retain(2).insert('!');
+      expect(this.quill.emitter.emit)
+        .toHaveBeenCalledWith(Emitter.events.TEXT_CHANGE, delta, this.oldDelta, Emitter.sources.API);
+    });
+
+    it('user text insert', function(done) {
+      this.container.firstChild.firstChild.firstChild.data = '01!23';
+      let delta = new Delta().retain(2).insert('!');
+      setTimeout(() => {
+        expect(this.quill.emitter.emit)
+          .toHaveBeenCalledWith(Emitter.events.TEXT_CHANGE, delta, this.oldDelta, Emitter.sources.USER);
+        done();
+      }, 1);
+    });
+
+    it('insert same character', function(done) {
+      this.quill.setText('aaaa\n');
+      this.quill.setSelection(2);
+      this.quill.update();
+      let old = this.quill.getContents();
+      let textNode = this.container.firstChild.firstChild.firstChild;
+      textNode.data = 'aaaaa';
+      this.quill.selection.setNativeRange(textNode.data, 3);
+      // this.quill.selection.update(Emitter.sources.SILENT);
+      let delta = new Delta().retain(2).insert('a');
+      setTimeout(() => {
+        let args = this.quill.emitter.emit.calls.mostRecent().args;
+        expect(args).toEqual([Emitter.events.TEXT_CHANGE, delta, old, Emitter.sources.USER]);
+        done();
+      }, 1);
     });
   });
 
@@ -213,6 +254,14 @@ describe('Quill', function() {
       let quill = this.initialize(Quill, '<h1>Welcome</h1>');
       quill.setContents(new Delta().insert('0123'));
       expect(quill.getContents()).toEqual(new Delta().insert('0123\n'));
+    });
+
+    it('inline formatting', function() {
+      let quill = this.initialize(Quill, '<p><strong>Bold</strong></p><p>Not bold</p>');
+      let contents = quill.getContents();
+      let delta = quill.setContents(contents);
+      expect(quill.getContents()).toEqual(contents);
+      expect(delta).toEqual(contents.delete(contents.length()));
     });
   });
 
@@ -283,7 +332,7 @@ describe('Quill', function() {
         }
       });
       expect(config.modules.formula).toEqual({});
-      expect(config.modules.syntax).toEqual({ highlight: null });
+      expect(config.modules.syntax).toEqual({ highlight: null, interval: 1000 });
       Theme.DEFAULTS.modules = oldModules;
     });
 
@@ -410,7 +459,7 @@ describe('Quill', function() {
     });
 
     it('toolbar custom handler, default container', function() {
-      let handler = function(value) {};
+      let handler = function() {};  // eslint-disable-line func-style
       let config = expandConfig('#test-container', {
         modules: {
           toolbar: {
