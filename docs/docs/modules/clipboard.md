@@ -20,8 +20,8 @@ Adds a custom matcher to the Clipboard. Matchers using `nodeType` are called fir
 **Methods**
 
 ```javascript
-addMatcher(String: selector, (Node: node, Delta: delta) => Delta)
-addMatcher(Number: nodeType, (Node: node, Delta: delta) => Delta)
+addMatcher(selector: String, (node: Node, delta: Delta) => Delta)
+addMatcher(nodeType: Number, (node: Node, delta: Delta) => Delta)
 ```
 
 **Examples**
@@ -74,20 +74,6 @@ var quill = new Quill('#editor', {
         ['B', customMatcherA],
         [Node.TEXT_NODE, customMatcherB]
       ]
-    }
-  }
-});
-```
-
-### matchVisual
-
-Quill by default does not have padding or margin for each line, whereas some websites or sources where a paste will come from will. By default Quill will try to match this spacing visually by adding an extra line to compensate for the missing margin/padding. This option disables this behavior.
-
-```javascript
-var quill = new Quill('#editor', {
-  modules: {
-    clipboard: {
-      matchVisual: false
     }
   }
 });

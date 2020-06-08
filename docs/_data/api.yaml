@@ -5,7 +5,6 @@
   - getText
   - insertEmbed
   - insertText
-  - pasteHTML
   - setContents
   - setText
   - updateContents
@@ -35,10 +34,10 @@
   - once
 - Model:
   - find-experimental
-  - getindex-experimental
-  - getleaf-experimental
-  - getline-experimental
-  - getlines-experimental
+  - getIndex-experimental
+  - getLeaf-experimental
+  - getLine-experimental
+  - getLines-experimental
 - Extension:
   - debug
   - import

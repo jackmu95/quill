@@ -68,7 +68,7 @@ var text = quill.getText(0, 10);
 
 ### insertEmbed
 
-Insert embedded content into the editor, returing a [Delta](/guides/working-with-deltas/) representing the change. [Source](/docs/api/#events) may be `"user"`, `"api"`, or `"silent"`. Calls where the `source` is `"user"` when the editor is [disabled](#disable) are ignored.
+Insert embedded content into the editor, returning a [Delta](/guides/working-with-deltas/) representing the change. [Source](/docs/api/#events) may be `"user"`, `"api"`, or `"silent"`. Calls where the `source` is `"user"` when the editor is [disabled](#disable) are ignored.
 
 **Methods**
 
@@ -79,7 +79,7 @@ insertEmbed(index: Number, type: String, value: any, source: String = 'api'): De
 **Examples**
 
 ```javascript
-quill.insertEmbed(10, 'image', 'http://quilljs.com/images/cloud.png');
+quill.insertEmbed(10, 'image', 'https://quilljs.com/images/cloud.png');
 ```
 
 ### insertText
@@ -107,12 +107,6 @@ quill.insertText(5, 'Quill', {
 });
 ```
 
-### pasteHTML
-
-***Deprecated***
-
-This API has been moved into [Clipboard](/docs/modules/clipboard/#dangerouslypastehtml) and renamed. It will be removed as a top level API in 2.0.
-
 ### setContents
 
 Overwrites editor with given contents. Contents should end with a [newline](/docs/delta/#line-formatting). Returns a Delta representing the change. This will be the same as the Delta passed in, if given Delta had no invalid operations. [Source](/docs/api/#events) may be `"user"`, `"api"`, or `"silent"`. Calls where the `source` is `"user"` when the editor is [disabled](#disable) are ignored.
@@ -135,7 +129,7 @@ quill.setContents([
 
 ### setText
 
-Sets contents of editor with given text, returing a [Delta](/guides/working-with-deltas/) representing the change. Note Quill documents must end with a newline so one will be added for you if omitted.  [Source](/docs/api/#events) may be `"user"`, `"api"`, or `"silent"`. Calls where the `source` is `"user"` when the editor is [disabled](#disable) are ignored.
+Sets contents of editor with given text, returning a [Delta](/guides/working-with-deltas/) representing the change. Note Quill documents must end with a newline so one will be added for you if omitted.  [Source](/docs/api/#events) may be `"user"`, `"api"`, or `"silent"`. Calls where the `source` is `"user"` when the editor is [disabled](#disable) are ignored.
 
 **Methods**
 
@@ -151,7 +145,7 @@ quill.setText('Hello\n');
 
 ### updateContents
 
-Applies Delta to editor contents, returing a [Delta](/guides/working-with-deltas/) representing the change. These Deltas will be the same if the Delta passed in had no invalid operations. [Source](/docs/api/#events) may be `"user"`, `"api"`, or `"silent"`. Calls where the `source` is `"user"` when the editor is [disabled](#disable) are ignored.
+Applies Delta to editor contents, returning a [Delta](/guides/working-with-deltas/) representing the change. These Deltas will be the same if the Delta passed in had no invalid operations. [Source](/docs/api/#events) may be `"user"`, `"api"`, or `"silent"`. Calls where the `source` is `"user"` when the editor is [disabled](#disable) are ignored.
 
 **Methods**
 
@@ -168,7 +162,7 @@ quill.updateContents(new Delta()
   .delete(5)                  // 'World' is deleted
   .insert('Quill')
   .retain(1, { bold: true })  // Apply bold to exclamation mark
-});
+);
 // Editor should now be [
 //  { insert: 'Hello Quill' },
 //  { insert: '!', attributes: { bold: true} }
