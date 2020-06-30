@@ -43,12 +43,17 @@ const jsRules = {
             {
               targets: {
                 browsers: [
-                  'last 2 Chrome major versions',
-                  'last 2 Firefox major versions',
-                  'last 2 Safari major versions',
-                  'last 2 Edge major versions',
-                  'last 2 iOS major versions',
-                  'last 2 ChromeAndroid major versions',
+                  '>= 1%',
+                  'last 1 major version',
+                  'not dead',
+                  'Chrome >= 45',
+                  'Firefox >= 38',
+                  'Edge >= 12',
+                  'Explorer >= 11',
+                  'iOS >= 9',
+                  'Safari >= 9',
+                  'Android >= 4.4',
+                  'Opera >= 30',
                 ],
               },
             },
